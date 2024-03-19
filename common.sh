@@ -149,8 +149,15 @@ OFFICIAL)
   export LUCI_EDITION="$(echo "${REPO_BRANCH}" |sed 's/openwrt-//g')"
   export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
 ;;
+ISTOREOS)
+  export REPO_URL="https://github.com/istoreos/istoreos"
+  export SOURCE="Istoreos"
+  export SOURCE_OWNER="istoreos's"
+  export LUCI_EDITION="${REPO_BRANCH}"
+  export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
+;;
 *)
-  TIME r "不支持${SOURCE_CODE}此源码，当前只支持COOLSNOWWOLF、LIENOL、IMMORTALWRT、XWRT、OFFICIAL"
+  TIME r "不支持${SOURCE_CODE}此源码，当前只支持COOLSNOWWOLF、LIENOL、IMMORTALWRT、XWRT、OFFICIAL、ISTOREOS"
   exit 1
 ;;
 esac
