@@ -303,7 +303,7 @@ cd ${GITHUB_WORKSPACE}
 export OPERATES_BUILD="0"
 curl -fsSL https://raw.githubusercontent.com/asxs123/ceshi/main/common.sh -o common.sh
 if [[ $? -ne 0 ]]; then
-  wget -q https://raw.githubusercontent.com/281677160/common/main/common.sh -O common.sh
+  wget -q https://raw.githubusercontent.com/asxs123/ceshi/main/common.sh -O common.sh
 fi
 export ACTIONS_VERSION="$(grep -E "ACTIONS_VERSION=.*" "common.sh" |grep -Eo [0-9]+\.[0-9]+\.[0-9]+)"
 export DIY_PART_SH="$(grep -Eo "DIY_PART_SH=.*" "common.sh" |grep '.sh' |awk 'NR==1' |cut -d'"' -f2)"
