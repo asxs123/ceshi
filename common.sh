@@ -322,7 +322,7 @@ mv -f uniq.conf feeds.conf.default
 
 # 这里增加了源,要对应的删除/etc/opkg/distfeeds.conf插件源
 cat >>"feeds.conf.default" <<-EOF
-src-git danshui1 https://github.com/281677160/openwrt-package.git;${SOURCE}
+src-git danshui1 https://github.com/281677160/openwrt-package.git;Official
 src-git helloworld https://github.com/fw876/helloworld.git
 src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
@@ -474,6 +474,13 @@ OFFICIAL)
   fi
 ;;
 XWRT)
+  s="luci-app-wrtbwmon,wrtbwmon,luci-app-dockerman,docker,dockerd,bcm27xx-userland,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
+  c=(${s//,/ })
+  for i in ${c[@]}; do \
+    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
+  done
+;;
+ISTOREOS)
   s="luci-app-wrtbwmon,wrtbwmon,luci-app-dockerman,docker,dockerd,bcm27xx-userland,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
   c=(${s//,/ })
   for i in ${c[@]}; do \
@@ -761,6 +768,19 @@ if [[ "${REPO_BRANCH}" =~ (openwrt-19.07|openwrt-21.02) ]]; then
   fi
 fi
 if [[ "${REPO_BRANCH}" =~ (openwrt-19.07|openwrt-21.02|openwrt-22.03) ]]; then
+  if [[ -d "${HOME_PATH}/feeds/passwall3/shadowsocksr-libev" ]]; then
+    curl -o ${HOME_PATH}/feeds/passwall3/shadowsocksr-libev/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocksr-libev/Makefile
+  fi
+  # 降低shadowsocks-rust版本,最新版本编译不成功
+  if [[ -d "${HOME_PATH}/feeds/passwall3/shadowsocks-rust" ]]; then
+    curl -o ${HOME_PATH}/feeds/passwall3/shadowsocks-rust/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocks-rust/Makefile
+  fi
+fi
+}
+
+function Diy_ISTOREOS() {
+cd ${HOME_PATH}
+if [[ "${REPO_BRANCH}" =~ (istoreos-21.02|istoreos-22.03) ]]; then
   if [[ -d "${HOME_PATH}/feeds/passwall3/shadowsocksr-libev" ]]; then
     curl -o ${HOME_PATH}/feeds/passwall3/shadowsocksr-libev/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocksr-libev/Makefile
   fi

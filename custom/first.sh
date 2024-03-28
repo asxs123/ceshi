@@ -17,6 +17,7 @@ else
 fi
 }
 
+# 版本更新
 function tongbu_1() {
 cd ${GITHUB_WORKSPACE}
 sudo rm -rf repogx shangyou
@@ -49,6 +50,7 @@ cp -Rf operates backupstwo/operates
 cp -Rf repogx/.github/workflows backupstwo/workflows
 }
 
+#小更新1+2
 function tongbu_2() {
 # 从上游仓库覆盖文件到本地仓库
 cd ${GITHUB_WORKSPACE}
@@ -210,6 +212,7 @@ else
 fi
 }
 
+# 大更新1+3
 function tongbu_3() {
 cd ${GITHUB_WORKSPACE}
 BANBEN_SHUOMING="大版本覆盖于 $(date +%Y.%m%d.%H%M.%S)"
@@ -303,6 +306,7 @@ cd ${GITHUB_WORKSPACE}
 export OPERATES_BUILD="0"
 curl -fsSL https://raw.githubusercontent.com/asxs123/ceshi/main/common.sh -o common.sh
 if [[ $? -ne 0 ]]; then
+  # curl下载失败，则执行wget下载。
   wget -q https://raw.githubusercontent.com/asxs123/ceshi/main/common.sh -O common.sh
 fi
 export ACTIONS_VERSION="$(grep -E "ACTIONS_VERSION=.*" "common.sh" |grep -Eo [0-9]+\.[0-9]+\.[0-9]+)"
@@ -323,7 +327,7 @@ fi
 
 if [[ ! -d "build" ]]; then
   echo -e "\033[31m 根目录缺少编译必要文件夹存在,进行同步上游仓库操作 \033[0m"
-  export SYNCHRONISE="2"
+  export SYNCHRONISE="2" #0不更新，1小版本更新，2大更新
   export OPERATES_BUILD="1"
   sleep 2
 elif [[ ! -d "build/${FOLDER_NAME}" ]]; then
