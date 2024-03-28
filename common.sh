@@ -1975,10 +1975,6 @@ if [[ -n "${PATHS1}" ]] && [[ -n "${TARGET1}" ]]; then
 else
   echo "获取变量失败,请勿胡乱修改compile.yml文件"
   exit 1
-
-if [[ -n "${PATHS1}" ]] && [[ -n "${TARGET1}" ]]; then
-  sed -i "s?${PATHS1}?${PATHS2}?g" "/c/Users/l/Desktop/common-main/common-main/UPLOAD/.github/workflows/compile.yml"
-  sed -i "s?${TARGET1}?${TARGET2}?g" "/c/Users/l/Desktop/common-main/common-main/UPLOAD/.github/workflows/compile.yml"
 fi
 cp -Rf ${HOME_PATH}/build_logo/config.txt UPLOAD/build/${FOLDER_NAME}/${CONFIG_FILE}
 echo "${SOURCE}-${REPO_BRANCH}-${CONFIG_FILE}-$(date +%Y年%m月%d号%H时%M分%S秒)" > UPLOAD/build/${FOLDER_NAME}/relevance/start
