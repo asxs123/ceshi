@@ -1953,37 +1953,37 @@ Diy_organize
 function build_openwrt() {
 # 触发compile.yml文件启动
 cd ${GITHUB_WORKSPACE}
-start_path="${GITHUB_WORKSPACE}/build/${FOLDER_NAME}/relevance/settings.ini"
-chmod -R +x ${start_path} && source ${start_path}
-if [[ "${CPU_SELECTION}" =~ (E5|false) ]]; then
-  kaisbianyixx="弃用E5-编译"
-else
-  kaisbianyixx="使用${CPU_SELECTION}-编译"
-fi
-git clone https://user:${REPO_TOKEN}@github.com/${GIT_REPOSITORY}.git UPLOAD
-mkdir -p "UPLOAD/build/${FOLDER_NAME}/relevance"
-mv ${start_path} UPLOAD/build/${FOLDER_NAME}/relevance/settings.ini
-export YML_PATH="UPLOAD/.github/workflows/compile.yml"
-cp -Rf ${GITHUB_WORKSPACE}/.github/workflows/compile.yml ${YML_PATH}
-export TARGET1="$(grep 'target: \[' "${YML_PATH}" |sed 's/^[ ]*//g' |grep -v '^#' |sed 's/\[/\\&/' |sed 's/\]/\\&/')"
-export TARGET2="target: \\[${FOLDER_NAME}\\]"
-export PATHS1="$(grep -Eo "\- '.*'" "${YML_PATH}" |sed 's/^[ ]*//g' |grep -v "^#" |awk 'NR==1')"
-export PATHS2="- 'build/${FOLDER_NAME}/relevance/start'"
-if [[ -n "${PATHS1}" ]] && [[ -n "${TARGET1}" ]]; then
-  sed -i "s?${PATHS1}?${PATHS2}?g" "${YML_PATH}"
-  sed -i "s?${TARGET1}?${TARGET2}?g" "${YML_PATH}"
-else
-  echo "获取变量失败,请勿胡乱修改compile.yml文件"
-  exit 1
-fi
-cp -Rf ${HOME_PATH}/build_logo/config.txt UPLOAD/build/${FOLDER_NAME}/${CONFIG_FILE}
-echo "${SOURCE}-${REPO_BRANCH}-${CONFIG_FILE}-$(date +%Y年%m月%d号%H时%M分%S秒)" > UPLOAD/build/${FOLDER_NAME}/relevance/start
+# start_path="${GITHUB_WORKSPACE}/build/${FOLDER_NAME}/relevance/settings.ini"
+# chmod -R +x ${start_path} && source ${start_path}
+# if [[ "${CPU_SELECTION}" =~ (E5|false) ]]; then
+#   kaisbianyixx="弃用E5-编译"
+# else
+#   kaisbianyixx="使用${CPU_SELECTION}-编译"
+# fi
+# git clone https://user:${REPO_TOKEN}@github.com/${GIT_REPOSITORY}.git UPLOAD
+# mkdir -p "UPLOAD/build/${FOLDER_NAME}/relevance"
+# mv ${start_path} UPLOAD/build/${FOLDER_NAME}/relevance/settings.ini
+# export YML_PATH="UPLOAD/.github/workflows/compile.yml"
+# cp -Rf ${GITHUB_WORKSPACE}/.github/workflows/compile.yml ${YML_PATH}
+# export TARGET1="$(grep 'target: \[' "${YML_PATH}" |sed 's/^[ ]*//g' |grep -v '^#' |sed 's/\[/\\&/' |sed 's/\]/\\&/')"
+# export TARGET2="target: \\[${FOLDER_NAME}\\]"
+# export PATHS1="$(grep -Eo "\- '.*'" "${YML_PATH}" |sed 's/^[ ]*//g' |grep -v "^#" |awk 'NR==1')"
+# export PATHS2="- 'build/${FOLDER_NAME}/relevance/start'"
+# if [[ -n "${PATHS1}" ]] && [[ -n "${TARGET1}" ]]; then
+#   sed -i "s?${PATHS1}?${PATHS2}?g" "${YML_PATH}"
+#   sed -i "s?${TARGET1}?${TARGET2}?g" "${YML_PATH}"
+# else
+#   echo "获取变量失败,请勿胡乱修改compile.yml文件"
+#   exit 1
+# fi
+# cp -Rf ${HOME_PATH}/build_logo/config.txt UPLOAD/build/${FOLDER_NAME}/${CONFIG_FILE}
+# echo "${SOURCE}-${REPO_BRANCH}-${CONFIG_FILE}-$(date +%Y年%m月%d号%H时%M分%S秒)" > UPLOAD/build/${FOLDER_NAME}/relevance/start
 
-cd UPLOAD
-BRANCH_HEAD="$(git rev-parse --abbrev-ref HEAD)"
-git add .
-git commit -m "${kaisbianyixx}-${FOLDER_NAME}-${LUCI_EDITION}-${TARGET_PROFILE}固件"
-git push --force "https://${REPO_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
+# cd UPLOAD
+# BRANCH_HEAD="$(git rev-parse --abbrev-ref HEAD)"
+# git add .
+# git commit -m "${kaisbianyixx}-${FOLDER_NAME}-${LUCI_EDITION}-${TARGET_PROFILE}固件"
+# git push --force "https://${REPO_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
 }
 
 
