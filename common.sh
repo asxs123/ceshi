@@ -239,6 +239,7 @@ fi
 
 
 function Diy_update() {
+sudo apt-get install -y ccache
 bash <(curl -fsSL https://raw.githubusercontent.com/281677160/common/main/custom/ubuntu.sh)
 if [[ $? -ne 0 ]];then
   TIME r "依赖安装失败，请检测网络后再次尝试!"
