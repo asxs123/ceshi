@@ -5,13 +5,18 @@
 
 
 function Diy_Part1() {
+	# 删除所有名为 'luci-app-autoupdate' 的目录
 	find . -type d -name 'luci-app-autoupdate' | xargs -i rm -rf {}
+	# 克隆 'luci-app-autoupdate' 仓库到路径 $HOME_PATH/package/luci-app-autoupdate
 	git clone -b main https://github.com/281677160/luci-app-autoupdate $HOME_PATH/package/luci-app-autoupdate 2>/dev/null
+	# 如果在文件 ${HOME_PATH}/include/target.mk 中没有找到包含 "luci-app-autoupdate" 的行
 	if [[ `grep -c "luci-app-autoupdate" ${HOME_PATH}/include/target.mk` -eq '0' ]]; then
+		# 将 DEFAULT_PACKAGES 中添加 'luci-app-autoupdate' 和 'luci-app-ttyd'
 		sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=luci-app-autoupdate luci-app-ttyd ?g' ${HOME_PATH}/include/target.mk
 	fi
+	# 如果目录 ${HOME_PATH}/package/luci-app-autoupdate 存在
 	if [[ -d "${HOME_PATH}/package/luci-app-autoupdate" ]]; then
-		echo "增加定时更新固件的插件完成"
+		echo "增加定时更新固件的插件完成"Diy_Part2
 	else
 		echo "插件源码下载失败"
 	fi

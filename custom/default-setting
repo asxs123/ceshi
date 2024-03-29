@@ -11,11 +11,13 @@ if [[ "${DISTRIB_ID}" == "ImmortalWrt" ]]; then
 	sed -i '/DISTRIB_REVISION/d' /etc/openwrt_release
 fi
 
-if [[ -f "/usr/lib/lua/luci/controller/ttyd.lua" ]]; then
-	sed -i 's?services?system?g' "/usr/lib/lua/luci/controller/ttyd.lua"
-fi
+# if [[ -f "/usr/lib/lua/luci/controller/ttyd.lua" ]]; then
+# 	sed -i 's?services?system?g' "/usr/lib/lua/luci/controller/ttyd.lua"
+# fi
 
+# 如果文件 "/etc/opkg/distfeeds.conf" 中包含 "danshui"
 if [[ `grep -c "danshui" /etc/opkg/distfeeds.conf` -ge '1' ]]; then
+	# 删除包含 "danshui" 的行
 	sed -i '/danshui/d' /etc/opkg/distfeeds.conf
 fi
 if [[ `grep -c "helloworld" /etc/opkg/distfeeds.conf` -ge '1' ]]; then
@@ -31,20 +33,32 @@ if [[ `grep -c "openwrt_x" /etc/opkg/distfeeds.conf` -ge '1' ]]; then
 	sed -i '/openwrt_x/d' /etc/opkg/distfeeds.conf
 fi
 
+# 如果文件 "/etc/config/dhcp" 中包含 "dns_redirect"
 if [[ `grep -c "dns_redirect" /etc/config/dhcp` -ge '1' ]]; then
+	# 停止 dnsmasq 服务
 	service dnsmasq stop
+	# 从文件 "/etc/config/dhcp" 中删除包含 "dns_redirect" 的行
 	sed -i '/dns_redirect/d' /etc/config/dhcp
+	# 提交配置更改
 	uci commit dhcp
+	# 启动 dnsmasq 服务
 	service dnsmasq start
 else
+	# 停止 dnsmasq 服务
 	service dnsmasq stop
+	# 设置 dhcp.@dnsmasq[0].dns_redirect 为 '0'
 	uci set dhcp.@dnsmasq[0].dns_redirect='0'
+	# 提交配置更改
 	uci commit dhcp
+	# 启动 dnsmasq 服务
 	service dnsmasq start
 fi
 
+# 如果文件 "/usr/share/ucode/luci/version.uc" 存在
 if [[ -f "/usr/share/ucode/luci/version.uc" ]]; then
+	# 删除文件中的 "export const revision" 行
 	sed -i '/export const revision/d' "/usr/share/ucode/luci/version.uc"
+	# 添加新的 "export const revision" 行
 	echo "export const revision = '112233', branch = '';" >> "/usr/share/ucode/luci/version.uc"
 fi
 

@@ -309,11 +309,17 @@ cd ${HOME_PATH}
 [[ ! -d "${HOME_PATH}/LICENSES/doc" ]] && mkdir -p "${HOME_PATH}/LICENSES/doc"
 [[ ! -d "${HOME_PATH}/build_logo" ]] && mkdir -p "${HOME_PATH}/build_logo"
 
+# 获取最新的版本标签
 LUCI_CHECKUT="$(git tag -l |grep '^V\|^v' |awk 'END {print}')"
+# 如果存在版本标签
 if [[ -n "${LUCI_CHECKUT}" ]]; then
+  # 切换到该标签
+  echo 111
   git checkout ${LUCI_CHECKUT}
+  # 基于该标签创建新分支
   git switch -c ${LUCI_CHECKUT}
 fi
+# 拉取最新的更改
 git pull
 
 sed -i '/281677160/d; /helloworld/d; /passwall/d; /OpenClash/d' "feeds.conf.default"
@@ -322,17 +328,20 @@ mv -f uniq.conf feeds.conf.default
 
 # 这里增加了源,要对应的删除/etc/opkg/distfeeds.conf插件源
 cat >>"feeds.conf.default" <<-EOF
-src-git danshui1 https://github.com/281677160/openwrt-package.git;Official
-src-git helloworld https://github.com/fw876/helloworld.git
-src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
+# src-git danshui1 https://github.com/281677160/openwrt-package.git;Official
+# src-git helloworld https://github.com/fw876/helloworld.git
+# src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
+src-git oaf https://github.com/jjm2473/OpenAppFilter.git;dev2
+src-git linkease_nas https://github.com/linkease/nas-packages.git;master
+src-git linkease_nas_luci https://github.com/linkease/nas-packages-luci.git;main
 EOF
 ./scripts/feeds update -a
 
-if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
-  echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme2" >> "feeds.conf.default"
-else
-  echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme1" >> "feeds.conf.default"
-fi
+# if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
+#   echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme2" >> "feeds.conf.default"
+# else
+#   echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme1" >> "feeds.conf.default"
+# fi
 z="*luci-theme-argon*,*luci-app-argon-config*,*luci-theme-Butterfly*,*luci-theme-netgear*,*luci-theme-atmaterial*, \
 luci-theme-rosy,luci-theme-darkmatter,luci-theme-infinityfreedom,luci-theme-design,luci-app-design-config, \
 luci-theme-bootstrap-mod,luci-theme-freifunk-generic,luci-theme-opentomato,luci-theme-kucat, \
@@ -341,7 +350,7 @@ luci-app-gost,gost,luci-app-smartdns,smartdns,luci-app-wizard,luci-app-msd_lite,
 luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-geodata"
 t=(${z//,/ })
 for x in ${t[@]}; do \
-  find . -type d -name "${x}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
+  find . -type d -name "${x}" |grep -v 'oaf\|linkease_nas\|linkease_nas_luci' |xargs -i rm -rf {}; \
 done
 
 case "${SOURCE_CODE}" in
@@ -480,13 +489,13 @@ XWRT)
     find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
 ;;
-ISTOREOS)
-  s="luci-app-wrtbwmon,wrtbwmon,luci-app-dockerman,docker,dockerd,bcm27xx-userland,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
-  c=(${s//,/ })
-  for i in ${c[@]}; do \
-    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
-  done
-;;
+# ISTOREOS)
+#   s="luci-app-wrtbwmon,wrtbwmon,luci-app-dockerman,docker,dockerd,bcm27xx-userland,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
+#   c=(${s//,/ })
+#   for i in ${c[@]}; do \
+#     find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
+#   done
+# ;;
 esac
 
 for X in $(ls -1 "${HOME_PATH}/feeds/passwall3"); do
@@ -510,7 +519,7 @@ if [[ ! -d "${HOME_PATH}/feeds/packages/lang/rust" ]]; then
 fi
 
 [[ ! -d "${HOME_PATH}/feeds/packages/devel/packr" ]] && cp -Rf ${HOME_PATH}/build/common/Share/packr ${HOME_PATH}/feeds/packages/devel/packr
-./scripts/feeds update danshui2
+# ./scripts/feeds update danshui2
 
 cp -Rf ${HOME_PATH}/feeds.conf.default ${HOME_PATH}/LICENSES/doc/uniq.conf
 }
@@ -529,17 +538,23 @@ else
   echo "LUCI_BANBEN=${LUCI_BANBEN}" >> $GITHUB_ENV
 fi
 
+# 查找位于 "${HOME_PATH}/package" 目录下，文件名以 "default-settings" 结尾的文件夹
 Settings_path="$(find "${HOME_PATH}/package" -type d -name "default-settings")"
+# 如果 "Settings_path" 为空且 "LUCI_BANBEN" 等于 "2"
 if [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "2" ]]; then
+  # 复制 default-settings2 到 package/default-settings
   cp -Rf ${HOME_PATH}/build/common/Share/default-settings2 ${HOME_PATH}/package/default-settings
+  # 如果目录 "${HOME_PATH}/feeds/luci/libs/luci-lib-base" 不存在，则从 Makefile 中删除 "+luci-lib-base"
   [[ ! -d "${HOME_PATH}/feeds/luci/libs/luci-lib-base" ]] && sed -i "s/+luci-lib-base //g" ${HOME_PATH}/package/default-settings/Makefile
 elif [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "1" ]]; then
   cp -Rf ${HOME_PATH}/build/common/Share/default-settings1 ${HOME_PATH}/package/default-settings
 fi
 
+# 查找位于 "${HOME_PATH}/package" 目录下，文件名以 "-default-settings" 结尾的文件
 ZZZ_PATH="$(find "${HOME_PATH}/package" -type f -name "*-default-settings" |grep files)"
 if [[ -n "${ZZZ_PATH}" ]]; then  
   echo "ZZZ_PATH=${ZZZ_PATH}" >> ${GITHUB_ENV}
+  # 删除 "${ZZZ_PATH}" 文件中以 "exit 0" 结尾的行
   sed -i '/exit 0$/d' "${ZZZ_PATH}"
 
   if [[ -f "${HOME_PATH}/LICENSES/doc/default-settings" ]]; then
@@ -548,12 +563,17 @@ if [[ -n "${ZZZ_PATH}" ]]; then
     cp -Rf "${ZZZ_PATH}" ${HOME_PATH}/LICENSES/doc/default-settings
   fi
 
+  # 如果文件 "${HOME_PATH}/LICENSES/doc/config_generates" 存在
   if [[ -f "${HOME_PATH}/LICENSES/doc/config_generates" ]]; then
+    # 将文件 "${HOME_PATH}/LICENSES/doc/config_generates" 复制到 "${GENE_PATH}"
     cp -Rf ${HOME_PATH}/LICENSES/doc/config_generates "${GENE_PATH}"
   else
+    # 否则，将 "${GENE_PATH}" 复制到文件 "${HOME_PATH}/LICENSES/doc/config_generates"
     cp -Rf "${GENE_PATH}" ${HOME_PATH}/LICENSES/doc/config_generates
   fi
+  # 将 "${ZZZ_PATH}" 文件中的 "main.lang" 替换为 "zh_cn"
   sed -i "s?main.lang=.*?main.lang='zh_cn'?g" "${ZZZ_PATH}"
+  # 如果文件 "${ZZZ_PATH}" 中存在 "openwrt_banner"，则删除该行
   [[ -n "$(grep "openwrt_banner" "${ZZZ_PATH}")" ]] && sed -i '/openwrt_banner/d' "${ZZZ_PATH}"
 
 cat >> "${ZZZ_PATH}" <<-EOF
@@ -570,6 +590,7 @@ fi
 cp -Rf ${HOME_PATH}/build/common/custom/default-setting "${DEFAULT_PATH}"
 sudo chmod +x "${DEFAULT_PATH}"
 sed -i '/exit 0$/d' "${DEFAULT_PATH}"
+# 将文件 "${DEFAULT_PATH}" 中的 "112233" 替换为 "${SOURCE} - ${LUCI_EDITION}"
 sed -i "s?112233?${SOURCE} - ${LUCI_EDITION}?g" "${DEFAULT_PATH}" > /dev/null 2>&1
 sed -i 's/root:.*/root::0:0:99999:7:::/g' ${FILES_PATH}/etc/shadow
 if [[ `grep -Eoc "admin:.*" ${FILES_PATH}/etc/shadow` -eq '1' ]]; then
@@ -594,8 +615,12 @@ if [[ -d "${HOME_PATH}/target/linux/armsr" ]]; then
 elif [[ -d "${HOME_PATH}/target/linux/armvirt" ]]; then
   features_file="${HOME_PATH}/target/linux/armvirt/Makefile"
 fi
+# 如果变量“features_file”不为空，则将文件“${features_file}”中的“FEATURES+=”替换为“FEATURES+=targz”
 [[ -n "${features_file}" ]] && sed -i "s?FEATURES+=.*?FEATURES+=targz?g" "${features_file}"
+# 删除文件“${REPAIR_PATH}”中包含“DISTRIB_SOURCECODE”的行
 sed -i '/DISTRIB_SOURCECODE/d' "${REPAIR_PATH}"
+# 将带有“DISTRIB_SOURCECODE='${SOURCE}_${LUCI_EDITION}'”的新行附加到文件“${REPAIR_PATH}”
+# 此外，从文件中删除任何空行
 echo -e "\nDISTRIB_SOURCECODE='${SOURCE}_${LUCI_EDITION}'" >> "${REPAIR_PATH}" && sed -i '/^\s*$/d' "${REPAIR_PATH}"
 
 # 给固件保留配置更新固件的保留项目
@@ -657,12 +682,15 @@ else
 fi
 
 # files大法，设置固件无烦恼
+# 应用目录“${BUILD_PATH}/patches”中的补丁
 if [ -n "$(ls -A "${BUILD_PATH}/patches" 2>/dev/null)" ]; then
   find "${BUILD_PATH}/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%'  | patch -d './' -p1 --forward --no-backup-if-mismatch"
 fi
+# 将文件从“${BUILD_PATH}/diy”复制到“${HOME_PATH}”
 if [ -n "$(ls -A "${BUILD_PATH}/diy" 2>/dev/null)" ]; then
   cp -Rf ${BUILD_PATH}/diy/* ${HOME_PATH}
 fi
+# 将文件从“${BUILD_PATH}/files”复制到“${HOME_PATH}/files”
 if [ -n "$(ls -A "${BUILD_PATH}/files" 2>/dev/null)" ]; then
   [[ -d "${HOME_PATH}/files" ]] && rm -rf ${HOME_PATH}/files
   cp -Rf ${BUILD_PATH}/files ${HOME_PATH}/files
@@ -780,15 +808,15 @@ fi
 
 function Diy_ISTOREOS() {
 cd ${HOME_PATH}
-if [[ "${REPO_BRANCH}" =~ (istoreos-21.02|istoreos-22.03) ]]; then
-  if [[ -d "${HOME_PATH}/feeds/passwall3/shadowsocksr-libev" ]]; then
-    curl -o ${HOME_PATH}/feeds/passwall3/shadowsocksr-libev/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocksr-libev/Makefile
-  fi
-  # 降低shadowsocks-rust版本,最新版本编译不成功
-  if [[ -d "${HOME_PATH}/feeds/passwall3/shadowsocks-rust" ]]; then
-    curl -o ${HOME_PATH}/feeds/passwall3/shadowsocks-rust/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocks-rust/Makefile
-  fi
-fi
+# if [[ "${REPO_BRANCH}" =~ (istoreos-21.02|istoreos-22.03) ]]; then
+#   if [[ -d "${HOME_PATH}/feeds/passwall3/shadowsocksr-libev" ]]; then
+#     curl -o ${HOME_PATH}/feeds/passwall3/shadowsocksr-libev/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocksr-libev/Makefile
+#   fi
+#   # 降低shadowsocks-rust版本,最新版本编译不成功
+#   if [[ -d "${HOME_PATH}/feeds/passwall3/shadowsocks-rust" ]]; then
+#     curl -o ${HOME_PATH}/feeds/passwall3/shadowsocks-rust/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocks-rust/Makefile
+#   fi
+# fi
 }
 
 
@@ -819,14 +847,22 @@ else
   echo "OpenClash_branch=master" >> ${GITHUB_ENV}
 fi
 
+# 删除 feeds.conf.default 文件中的重复行
 cat feeds.conf.default|awk '!/^#/'|awk '!/^$/'|awk '!a[$1" "$2]++{print}' >uniq.conf
 mv -f uniq.conf feeds.conf.default
+# 将 feeds.conf.default 文件中包含 "danshui" 的行注释掉
 sed -i 's@.*danshui*@#&@g' "feeds.conf.default"
+# 将 feeds.conf.default 文件中包含 "src-git lienol" 的行注释掉
 sed -i 's@.*src-git lienol*@#&@g' "feeds.conf.default"
+# 将 feeds.conf.default 文件中包含 "src-git other" 的行注释掉
 sed -i 's@.*src-git other*@#&@g' "feeds.conf.default"
+# 更新 feeds
 ./scripts/feeds update -a
+# 取消注释 feeds.conf.default 文件中以 "#danshui" 开头的行
 sed -i 's/^#\(.*danshui\)/\1/' "feeds.conf.default"
+# 取消注释 feeds.conf.default 文件中以 "#src-git lienol" 开头的行
 sed -i 's/^#\(.*src-git lienol\)/\1/' "feeds.conf.default"
+# 取消注释 feeds.conf.default 文件中以 "#src-git other" 开头的行
 sed -i 's/^#\(.*src-git other\)/\1/' "feeds.conf.default"
 
 # 正在执行插件语言修改
