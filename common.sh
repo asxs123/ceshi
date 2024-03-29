@@ -1976,6 +1976,7 @@ else
   echo "获取变量失败,请勿胡乱修改compile.yml文件"
   exit 1
 fi
+sed -i 's/make -j$(nproc) || make -j1 V=s/make -j1 V=s/' "${YML_PATH}"
 cp -Rf ${HOME_PATH}/build_logo/config.txt UPLOAD/build/${FOLDER_NAME}/${CONFIG_FILE}
 echo "${SOURCE}-${REPO_BRANCH}-${CONFIG_FILE}-$(date +%Y年%m月%d号%H时%M分%S秒)" > UPLOAD/build/${FOLDER_NAME}/relevance/start
 
