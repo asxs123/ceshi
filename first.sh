@@ -7,9 +7,6 @@ cd ${GITHUB_WORKSPACE}
 function Diy_continue() {
   cd ${GITHUB_WORKSPACE}
   sudo rm -rf build/common && git clone -b 123 --depth 1 https://github.com/asxs123/ceshi build/common
-  cp -Rf build/common/*.sh build/${FOLDER_NAME}/
-  cp -Rf build/common/common.sh build/${FOLDER_NAME}/common.sh
-  cp -Rf build/common/upgrade.sh build/${FOLDER_NAME}/upgrade.sh
   chmod -R +x build 
 }
 
