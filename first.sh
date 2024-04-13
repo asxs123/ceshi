@@ -8,8 +8,6 @@ function Diy_continue() {
   cd ${GITHUB_WORKSPACE}
   sudo rm -rf build/common && git clone -b 123 --depth 1 https://github.com/asxs123/ceshi build/common
   chmod -R +x build 
-  echo "DIY_P2_SH=build/common/diy-part2.sh" >> ${GITHUB_ENV}
-  echo "CONFIGS=build/common/X86.config" >> ${GITHUB_ENV}
 }
 
 # # 版本更新
