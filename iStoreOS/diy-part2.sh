@@ -1,32 +1,32 @@
-# #!/bin/bash
-# #
-# # Copyright (c) 2019-2023 SmallProgram <https://github.com/smallprogram>
-# #
-# # This is free software, licensed under the MIT License.
-# # See /LICENSE for more information.
-# #
-# # https://github.com/smallprogram/OpenWrtAction
-# # File name: diy-part2.sh
-# # Description: OpenWrt DIY script part 2 (After Update feeds)
-# #
+#!/bin/bash
+#
+# Copyright (c) 2019-2023 SmallProgram <https://github.com/smallprogram>
+#
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
+# https://github.com/smallprogram/OpenWrtAction
+# File name: diy-part2.sh
+# Description: OpenWrt DIY script part 2 (After Update feeds)
+#
 
-# is_wsl2op=$1
+is_wsl2op=$1
 
-# # Modify default IP
-# sed -i 's/192.168.1.1/192.168.1.3/g' package/base-files/files/bin/config_generate
+# Modify default IP
+sed -i 's/192.168.1.1/192.168.1.3/g' package/base-files/files/bin/config_generate
 
-# # 修改主机名字，把 iStore OS 修改你喜欢的就行（不能纯数字或者使用中文）
-# # sed -i 's/OpenWrt/iStore OS/g' package/base-files/files/bin/config_generate
+# 修改主机名字，把 iStore OS 修改你喜欢的就行（不能纯数字或者使用中文）
+# sed -i 's/OpenWrt/iStore OS/g' package/base-files/files/bin/config_generate
 
-# ###### 取消bootstrap为默认主题 ######
-# sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
+###### 取消bootstrap为默认主题 ######
+sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
 
-# rm -rf ./package/lean/luci-app-adguardhome
-# git clone https://github.com/rufengsuixing/luci-app-adguardhome.git ./package/lean/luci-app-adguardhome
+rm -rf ./package/lean/luci-app-adguardhome
+git clone https://github.com/rufengsuixing/luci-app-adguardhome.git ./package/lean/luci-app-adguardhome
 
-# git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
+git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
 
-# git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
+git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
 
 # # mosdns
 # # drop mosdns and v2ray-geodata packages that come with the source
