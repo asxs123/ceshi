@@ -111,13 +111,24 @@ chmod +x $core_path/clash*
 echo -e "预置adguardhome内核"
 
 rm -rf package/lean/luci-app-adguardhome/root/usr/bin/AdGuardHome
-mkdir -p package/lean/luci-app-adguardhome/root/usr/bin/AdGuardHome
-adgcore="package/lean/luci-app-adguardhome/root/usr/bin/AdGuardHome"
+mkdir -p package/lean/luci-app-adguardhome/root/usr/bin
+adgcore="package/lean/luci-app-adguardhome/root/usr/bin"
 
 ADG_CORE_URL="https://github.com/AdguardTeam/AdGuardHome/releases/download/$(uclient-fetch -qO- 'https://api.github.com/repos/AdguardTeam/AdGuardHome/releases' | jsonfilter -e '@[0].tag_name')/AdGuardHome_linux_amd64.tar.gz"
 
-wget -qO- $ADG_CORE_URL | tar xOvz > $adgcore/AdGuardHome
-chmod +x $adgcore/AdGuardHome
+wget -qO- $ADG_CORE_URL
+if [[ -f "AdGuardHome_${Arch}.tar.gz" ]]; then
+  tar -zxvf AdGuardHome_${Arch}.tar.gz -C $adgcore
+  echo "核心下载成功"
+else
+  echo "下载核心失败"
+fi
+if [[ -f "$adgcore/AdGuardHome/AdGuardHome" ]]; then
+  sudo chmod +x $adgcore/AdGuardHome/AdGuardHome
+  echo "增加AdGuardHome核心完成"
+else
+  echo "增加AdGuardHome核心失败"
+fi
 
 
 echo -e "预置unblockneteasemusic内核"
