@@ -117,8 +117,8 @@ adgcore="package/lean/luci-app-adguardhome/root/usr/bin"
 ADG_CORE_URL="https://github.com/AdguardTeam/AdGuardHome/releases/download/$(uclient-fetch -qO- 'https://api.github.com/repos/AdguardTeam/AdGuardHome/releases' | jsonfilter -e '@[0].tag_name')/AdGuardHome_linux_amd64.tar.gz"
 echo -e $ADG_CORE_URL
 wget -qO- $ADG_CORE_URL
-if [[ -f "AdGuardHome_${Arch}.tar.gz" ]]; then
-  tar -zxvf AdGuardHome_${Arch}.tar.gz -C $adgcore
+if [[ -f "AdGuardHome_amd64.tar.gz" ]]; then
+  tar -zxvf AdGuardHome_amd64.tar.gz -C $adgcore
   echo "核心下载成功"
 else
   echo "下载核心失败"
