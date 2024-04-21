@@ -115,6 +115,7 @@ mkdir -p package/lean/luci-app-adguardhome/root/usr/bin
 adgcore="package/lean/luci-app-adguardhome/root/usr/bin"
 
 ADG_CORE_URL="https://github.com/AdguardTeam/AdGuardHome/releases/download/$(uclient-fetch -qO- 'https://api.github.com/repos/AdguardTeam/AdGuardHome/releases' | jsonfilter -e '@[0].tag_name')/AdGuardHome_linux_amd64.tar.gz"
+ADG_CORE_URL="https://github.com/AdguardTeam/AdGuardHome/releases/download/$(curl -s 'https://api.github.com/repos/AdguardTeam/AdGuardHome/releases' | grep -oP '\"tag_name\": \"\\K[^\"]+\"')/AdGuardHome_linux_amd64.tar.gz"
 echo -e $ADG_CORE_URL
 wget -qO- $ADG_CORE_URL
 if [[ -f "AdGuardHome_amd64.tar.gz" ]]; then
@@ -133,7 +134,8 @@ fi
 
 echo -e "预置unblockneteasemusic内核"
 NAME="package/luci-app-unblockneteasemusic/root/usr/share/unblockneteasemusic" && mkdir -p $NAME/core
-echo "$(uclient-fetch -qO- 'https://api.github.com/repos/UnblockNeteaseMusic/server/commits?sha=enhanced&path=precompiled' | jsonfilter -e '@[0].sha')">"$NAME/core_local_ver"
+# echo "$(uclient-fetch -qO- 'https://api.github.com/repos/UnblockNeteaseMusic/server/commits?sha=enhanced&path=precompiled' | jsonfilter -e '@[0].sha')">"$NAME/core_local_ver"
+echo "$(curl -s 'https://api.github.com/repos/UnblockNeteaseMusic/server/commits?sha=enhanced&path=precompiled' | grep -oP '@[0].sha')">"$NAME/core_local_ver"
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/precompiled/app.js -o $NAME/core/app.js
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/precompiled/bridge.js -o $NAME/core/bridge.js
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/ca.crt -o $NAME/core/ca.crt
