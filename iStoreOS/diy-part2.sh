@@ -10,9 +10,7 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
-is_wsl2op=$1
-
-# Modify default IP
+# 修改默认 IP，把 192.168.1.3 修改你的就行
 sed -i 's/192.168.1.1/192.168.1.3/g' package/base-files/files/bin/config_generate
 
 # 修改主机名字，把 iStore OS 修改你喜欢的就行（不能纯数字或者使用中文）
@@ -21,115 +19,199 @@ sed -i 's/192.168.1.1/192.168.1.3/g' package/base-files/files/bin/config_generat
 ###### 取消bootstrap为默认主题 ######
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
 
+
+
+# 添加adguardhome
 rm -rf ./package/lean/luci-app-adguardhome
 git clone https://github.com/rufengsuixing/luci-app-adguardhome.git ./package/lean/luci-app-adguardhome
-
+# 添加ddns-go
 git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
-
+# 添加unblockneteasemusic
 git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
 
-# mosdns
-# drop mosdns and v2ray-geodata packages that come with the source
-find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
-find ./ | grep Makefile | grep mosdns | xargs rm -f
-rm -rf ./feeds/luci/applications/luci-app-mosdns/
-rm -rf ./feeds/packages/net/mosdns/
-rm -rf ./package/custom_packages/mosdns
-rm -rf ./feeds/packages/net/v2ray-geodata/
-git clone https://github.com/sbwml/luci-app-mosdns -b v5 ./package/custom_packages/mosdns
-git clone https://github.com/sbwml/v2ray-geodata ./package/custom_packages/v2ray-geodata
 
-# rm -rf ./feeds/packages/lang/golang
-# git clone https://github.com/sbwml/packages_lang_golang -b 20.x ./feeds/packages/lang/golang
-# git clone https://github.com/sbwml/luci-app-alist ./package/alist
-
-
-# if [ ! -d "./package/lean/luci-app-argon-config" ]; then git clone -b 18.06 https://github.com/jerrykuku/luci-app-argon-config.git ./package/lean/luci-app-argon-config;   else cd ./package/lean/luci-app-argon-config; git stash; git stash drop; git pull; cd ..; cd ..; cd ..; fi;
-# if [ ! -d "./package/lean/luci-app-adguardhome" ]; then git clone https://github.com/rufengsuixing/luci-app-adguardhome.git ./package/lean/luci-app-adguardhome;   else cd ./package/lean/luci-app-adguardhome; git stash; git stash drop; git pull; cd ..; cd ..; cd ..; fi;
-# git clone https://github.com/jerrykuku/lua-maxminddb.git
-# git clone https://github.com/jerrykuku/luci-app-vssr.git
-# git clone https://github.com/lisaac/luci-app-dockerman.git
-
-
-# Reset drive type
-# sed -i 's/(dmesg | grep .*/{a}${b}${c}${d}${e}${f}/g' package/lean/autocore/files/x86/autocore
-# sed -i '/h=${g}.*/d' package/lean/autocore/files/x86/autocore
-# sed -i 's/echo $h/echo $g/g' package/lean/autocore/files/x86/autocore
-
-# Close running yards
-# sed -i 's/console=tty0//g'  target/linux/x86/image/Makefile
-
-
-rm -rf ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-mkdir -p ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-
-if [ ! -n "$is_wsl2op" ]; then
-    # Add default login background
-    cp -r $GITHUB_WORKSPACE/source/video/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-    cp -r $GITHUB_WORKSPACE/source/img/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-
-    # Inject download package
-    mkdir -p $GITHUB_WORKSPACE/openwrt/dl
-    cp -r $GITHUB_WORKSPACE/library/* $GITHUB_WORKSPACE/openwrt/dl/
-
-    # Fixed qmi_wwan_f complie error
-    # cp -r $GITHUB_WORKSPACE/patches/qmi_wwan_f.c $GITHUB_WORKSPACE/openwrt/package/wwan/driver/fibocom_QMI_WWAN/src/qmi_wwan_f.c
-
+# 判断CPU架构
+if [[ `grep -c "CONFIG_ARCH=\"x86_64\"" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]]; then
+  Arch="linux_amd64"
+  Archclash="linux-amd64"
+  echo "CPU架构：amd64"
+elif [[ `grep -c "CONFIG_ARCH=\"i386\"" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]]; then
+  Arch="linux_386"
+  Archclash="linux-386"
+  echo "CPU架构：X86 32"
+elif [[ `grep -c "CONFIG_ARCH=\"aarch64\"" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]]; then
+  Arch="linux_arm64"
+  Archclash="linux-arm64"
+  echo "CPU架构：arm64"
+elif [[ `grep -c "CONFIG_arm_v7=y" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]]; then
+  Arch="linux_armv7"
+  Archclash="linux-armv7"
+  echo "CPU架构：armv7"
+elif [[ `grep -c "CONFIG_ARCH=\"arm\"" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]] && [[ `grep -c "CONFIG_arm_v7=y" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '0' ]] && [[ `grep "CONFIG_TARGET_ARCH_PACKAGES" "${GITHUB_WORKSPACE}/openwrt/.config" |grep -c "vfp"` -eq '1' ]]; then
+  Arch="linux_armv6"
+  Archclash="linux-armv6"
+  echo "CPU架构：armv6"
+elif [[ `grep -c "CONFIG_ARCH=\"arm\"" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]] && [[ `grep -c "CONFIG_arm_v7=y" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '0' ]] && [[ `grep "CONFIG_TARGET_ARCH_PACKAGES" "${GITHUB_WORKSPACE}/openwrt/.config" |grep -c "vfp"` -eq '0' ]]; then
+  Arch="linux_armv5"
+  Archclash="linux-armv5"
+  echo "CPU架构：armv6"
+elif [[ `grep -c "CONFIG_ARCH=\"mips\"" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]]; then
+  Arch="linux_mips_softfloat"
+  Archclash="linux-mips-softfloat"
+  echo "CPU架构：mips"
+elif [[ `grep -c "CONFIG_ARCH=\"mips64\"" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]]; then
+  Arch="linux_mips64_softfloat"
+  Archclash="linux-mips64"
+  echo "CPU架构：mips64"
+elif [[ `grep -c "CONFIG_ARCH=\"mipsel\"" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]]; then
+  Arch="linux_mipsle_softfloat"
+  Archclash="linux-mipsle-softfloat"
+  echo "CPU架构：mipsel"
+elif [[ `grep -c "CONFIG_ARCH=\"mips64el\"" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]]; then
+  Arch="linux_mips64le_softfloat"
+  Archclash="linux-mips64le"
+  echo "CPU架构：mips64el"
 else
-    # Add default login background
-    cp -r /home/$USER/OpenWrtAction/source/video/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-    cp -r /home/$USER/OpenWrtAction/source/img/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-
-    # Inject download package
-    mkdir -p dl
-    cp -r /home/$USER/OpenWrtAction/library/* dl/
-
-    # Fixed qmi_wwan_f complie error
-    # cp -r ../OpenWrtAction/patches/qmi_wwan_f.c ./package/wwan/driver/fibocom_QMI_WWAN/src/qmi_wwan_f.c
+  echo "不了解您的CPU为何架构"
+  weizhicpu="1"
 fi
 
-echo -e "预置Clash内核"
-mkdir -p feeds/OpenClash/luci-app-openclash/root/etc/openclash/core
-core_path="feeds/OpenClash/luci-app-openclash/root/etc/openclash/core"
-# goe_path="luci-app-openclash/root/etc/openclash"
+echo "正在执行：给openclash下载核心"
+rm -rf ${GITHUB_WORKSPACE}/openwrt/files/etc/openclash/core
+rm -rf ${GITHUB_WORKSPACE}/openwrt/clash-neihe && mkdir -p ${GITHUB_WORKSPACE}/openwrt/clash-neihe
+mkdir -p ${GITHUB_WORKSPACE}/openwrt/files/etc/openclash/core
+cd ${GITHUB_WORKSPACE}/openwrt/clash-neihe
+wget -q https://raw.githubusercontent.com/vernesong/OpenClash/core/${OpenClash_branch}/meta/clash-${Archclash}.tar.gz -O meta.tar.gz
+wget -q https://raw.githubusercontent.com/vernesong/OpenClash/core/${OpenClash_branch}/dev/clash-${Archclash}.tar.gz -O clash.tar.gz
+wget -q https://raw.githubusercontent.com/vernesong/OpenClash/core/${OpenClash_branch}/core_version -O core_version
+TUN="$(cat core_version |grep -v "^v\|^V\|^a" |grep -E "[0-9]+.[0-9]+.[0-9]+")"
+wget -q https://raw.githubusercontent.com/vernesong/OpenClash/core/${OpenClash_branch}/premium/clash-${Archclash}-${TUN}.gz -O clash_tun.gz
 
-CLASH_DEV_URL="https://raw.githubusercontent.com/vernesong/OpenClash/core/master/dev/clash-linux-amd64.tar.gz"
-# CLASH_TUN_URL=$(curl -fsSL https://api.github.com/repos/vernesong/OpenClash/contents/master/premium\?ref\=core | grep download_url | grep $1 | awk -F '"' '{print $4}' | grep "v3" )
-CLASH_TUN_URL="https://raw.githubusercontent.com/vernesong/OpenClash/core/master/premium/clash-linux-amd64-$(curl -fsSL https://raw.githubusercontent.com/vernesong/OpenClash/core/master/core_version | grep -v "^v\|^V\|^a" | grep -E "[0-9]+.[0-9]+.[0-9]+").gz"
-CLASH_META_URL="https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-amd64.tar.gz"
-# GEOIP_URL="https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat"
-# GEOSITE_URL="https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat"
+tar -zxvf clash.tar.gz -O > clash
+if [[ $? -eq 0 ]];then
+  mv -f ${GITHUB_WORKSPACE}/openwrt/clash-neihe/clash ${GITHUB_WORKSPACE}/openwrt/files/etc/openclash/core/clash
+  sudo chmod +x ${GITHUB_WORKSPACE}/openwrt/files/etc/openclash/core/clash
+  echo "OpenClash增加dev内核成功"
+else
+  echo "OpenClash增加dev内核失败"
+fi
+tar -zxvf meta.tar.gz -O > clash_meta
+if [[ $? -eq 0 ]];then
+  mv -f ${GITHUB_WORKSPACE}/openwrt/clash-neihe/clash_meta ${GITHUB_WORKSPACE}/openwrt/files/etc/openclash/core/clash_meta
+  sudo chmod +x ${GITHUB_WORKSPACE}/openwrt/files/etc/openclash/core/clash_meta
+  echo "OpenClash增加meta内核成功"
+else
+  echo "OpenClash增加meta内核失败"
+fi
+gzip -d clash_tun.gz
+if [[ $? -eq 0 ]];then
+  mv -f ${GITHUB_WORKSPACE}/openwrt/clash-neihe/clash_tun ${GITHUB_WORKSPACE}/openwrt/files/etc/openclash/core/clash_tun
+  sudo chmod +x ${GITHUB_WORKSPACE}/openwrt/files/etc/openclash/core/clash_tun
+  echo "clash"
+  echo "OpenClash增加tun内核成功"
+else
+  echo "OpenClash增加tun内核失败"
+fi
+cd ${GITHUB_WORKSPACE}/openwrt
+rm -rf ${GITHUB_WORKSPACE}/openwrt/clash-neihe
 
-wget -qO- $CLASH_DEV_URL | tar xOvz > $core_path/clash
-wget -qO- $CLASH_TUN_URL | gunzip -c > $core_path/clash_tun
-wget -qO- $CLASH_META_URL | tar xOvz > $core_path/clash_meta
-# wget -qO- $GEOIP_URL > $goe_path/GeoIP.dat
-# wget -qO- $GEOSITE_URL > $goe_path/GeoSite.dat
-
-chmod +x $core_path/clash*
-
-
-echo -e "预置adguardhome内核"
-
-rm -rf package/lean/luci-app-adguardhome/root/usr/bin/AdGuardHome
-mkdir -p package/lean/luci-app-adguardhome/root/usr/bin
-adgcore="package/lean/luci-app-adguardhome/root/usr/bin"
-
-# ADG_CORE_URL="https://github.com/AdguardTeam/AdGuardHome/releases/download/$(uclient-fetch -qO- 'https://api.github.com/repos/AdguardTeam/AdGuardHome/releases' | jsonfilter -e '@[0].tag_name')/AdGuardHome_linux_amd64.tar.gz"
-ADG_CORE_URL="https://github.com/AdguardTeam/AdGuardHome/releases/download/$(curl -s 'https://api.github.com/repos/AdguardTeam/AdGuardHome/releases/latest' | grep -E 'tag_name' | grep -E 'v[0-9.]+' -o 2>/dev/null)/AdGuardHome_linux_amd64.tar.gz"
-wget -qO- $ADG_CORE_URL
-if [[ -f "AdGuardHome_amd64.tar.gz" ]]; then
-  tar -zxvf AdGuardHome_amd64.tar.gz -C $adgcore
+echo "正在执行：给adguardhome下载核心"
+rm -rf ${GITHUB_WORKSPACE}/openwrt/AdGuardHome && rm -rf ${GITHUB_WORKSPACE}/openwrt/files/usr/bin
+wget -q https://github.com/281677160/common/releases/download/API/AdGuardHome.api -O AdGuardHome.api
+if [[ $? -ne 0 ]];then
+  curl -fsSL https://github.com/281677160/common/releases/download/API/AdGuardHome.api -o AdGuardHome.api
+fi
+latest_ver="$(grep -E 'tag_name' 'AdGuardHome.api' |grep -E 'v[0-9.]+' -o 2>/dev/null)"
+rm -rf AdGuardHome.api
+wget -q https://github.com/AdguardTeam/AdGuardHome/releases/download/${latest_ver}/AdGuardHome_${Arch}.tar.gz
+if [[ -f "AdGuardHome_${Arch}.tar.gz" ]]; then
+  tar -zxvf AdGuardHome_${Arch}.tar.gz -C ${GITHUB_WORKSPACE}/openwrt
   echo "核心下载成功"
 else
   echo "下载核心失败"
 fi
-if [[ -f "$adgcore/AdGuardHome/AdGuardHome" ]]; then
-  sudo chmod +x $adgcore/AdGuardHome/AdGuardHome
+mkdir -p ${GITHUB_WORKSPACE}/openwrt/files/usr/bin
+if [[ -f "${GITHUB_WORKSPACE}/openwrt/AdGuardHome/AdGuardHome" ]]; then
+  mv -f ${GITHUB_WORKSPACE}/openwrt/AdGuardHome ${GITHUB_WORKSPACE}/openwrt/files/usr/bin/
+  sudo chmod +x ${GITHUB_WORKSPACE}/openwrt/files/usr/bin/AdGuardHome/AdGuardHome
   echo "增加AdGuardHome核心完成"
 else
   echo "增加AdGuardHome核心失败"
 fi
+  rm -rf ${GITHUB_WORKSPACE}/openwrt/{AdGuardHome_${Arch}.tar.gz,AdGuardHome}
+
+
+
+# rm -rf ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+# mkdir -p ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+
+# if [ ! -n "$is_wsl2op" ]; then
+#     # Add default login background
+#     cp -r $GITHUB_WORKSPACE/source/video/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+#     cp -r $GITHUB_WORKSPACE/source/img/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+
+#     # Inject download package
+#     mkdir -p $GITHUB_WORKSPACE/openwrt/dl
+#     cp -r $GITHUB_WORKSPACE/library/* $GITHUB_WORKSPACE/openwrt/dl/
+
+#     # Fixed qmi_wwan_f complie error
+#     # cp -r $GITHUB_WORKSPACE/patches/qmi_wwan_f.c $GITHUB_WORKSPACE/openwrt/package/wwan/driver/fibocom_QMI_WWAN/src/qmi_wwan_f.c
+
+# else
+#     # Add default login background
+#     cp -r /home/$USER/OpenWrtAction/source/video/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+#     cp -r /home/$USER/OpenWrtAction/source/img/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+
+#     # Inject download package
+#     mkdir -p dl
+#     cp -r /home/$USER/OpenWrtAction/library/* dl/
+
+#     # Fixed qmi_wwan_f complie error
+#     # cp -r ../OpenWrtAction/patches/qmi_wwan_f.c ./package/wwan/driver/fibocom_QMI_WWAN/src/qmi_wwan_f.c
+# fi
+
+# echo -e "预置Clash内核"
+# mkdir -p feeds/OpenClash/luci-app-openclash/root/etc/openclash/core
+# core_path="feeds/OpenClash/luci-app-openclash/root/etc/openclash/core"
+# # goe_path="luci-app-openclash/root/etc/openclash"
+
+# CLASH_DEV_URL="https://raw.githubusercontent.com/vernesong/OpenClash/core/master/dev/clash-linux-amd64.tar.gz"
+# # CLASH_TUN_URL=$(curl -fsSL https://api.github.com/repos/vernesong/OpenClash/contents/master/premium\?ref\=core | grep download_url | grep $1 | awk -F '"' '{print $4}' | grep "v3" )
+# CLASH_TUN_URL="https://raw.githubusercontent.com/vernesong/OpenClash/core/master/premium/clash-linux-amd64-$(curl -fsSL https://raw.githubusercontent.com/vernesong/OpenClash/core/master/core_version | grep -v "^v\|^V\|^a" | grep -E "[0-9]+.[0-9]+.[0-9]+").gz"
+# CLASH_META_URL="https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-amd64.tar.gz"
+# # GEOIP_URL="https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat"
+# # GEOSITE_URL="https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat"
+
+# wget -qO- $CLASH_DEV_URL | tar xOvz > $core_path/clash
+# wget -qO- $CLASH_TUN_URL | gunzip -c > $core_path/clash_tun
+# wget -qO- $CLASH_META_URL | tar xOvz > $core_path/clash_meta
+# # wget -qO- $GEOIP_URL > $goe_path/GeoIP.dat
+# # wget -qO- $GEOSITE_URL > $goe_path/GeoSite.dat
+
+# chmod +x $core_path/clash*
+
+
+# echo -e "预置adguardhome内核"
+
+# rm -rf package/lean/luci-app-adguardhome/root/usr/bin/AdGuardHome
+# mkdir -p package/lean/luci-app-adguardhome/root/usr/bin
+# adgcore="package/lean/luci-app-adguardhome/root/usr/bin"
+
+# # ADG_CORE_URL="https://github.com/AdguardTeam/AdGuardHome/releases/download/$(uclient-fetch -qO- 'https://api.github.com/repos/AdguardTeam/AdGuardHome/releases' | jsonfilter -e '@[0].tag_name')/AdGuardHome_linux_amd64.tar.gz"
+# ADG_CORE_URL="https://github.com/AdguardTeam/AdGuardHome/releases/download/$(curl -s 'https://api.github.com/repos/AdguardTeam/AdGuardHome/releases/latest' | grep -E 'tag_name' | grep -E 'v[0-9.]+' -o 2>/dev/null)/AdGuardHome_linux_amd64.tar.gz"
+# wget -qO- $ADG_CORE_URL
+# if [[ -f "AdGuardHome_amd64.tar.gz" ]]; then
+#   tar -zxvf AdGuardHome_amd64.tar.gz -C $adgcore
+#   echo "核心下载成功"
+# else
+#   echo "下载核心失败"
+# fi
+# if [[ -f "$adgcore/AdGuardHome/AdGuardHome" ]]; then
+#   sudo chmod +x $adgcore/AdGuardHome/AdGuardHome
+#   echo "增加AdGuardHome核心完成"
+# else
+#   echo "增加AdGuardHome核心失败"
+# fi
 
 
 echo -e "预置unblockneteasemusic内核"
