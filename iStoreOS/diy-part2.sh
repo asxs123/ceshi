@@ -96,7 +96,6 @@ core_path="feeds/OpenClash/luci-app-openclash/root/etc/openclash/core"
 CLASH_DEV_URL="https://raw.githubusercontent.com/vernesong/OpenClash/core/master/dev/clash-linux-amd64.tar.gz"
 # CLASH_TUN_URL=$(curl -fsSL https://api.github.com/repos/vernesong/OpenClash/contents/master/premium\?ref\=core | grep download_url | grep $1 | awk -F '"' '{print $4}' | grep "v3" )
 CLASH_TUN_URL="https://raw.githubusercontent.com/vernesong/OpenClash/core/master/premium/clash-linux-amd64-$(curl -fsSL https://raw.githubusercontent.com/vernesong/OpenClash/core/master/core_version | grep -v "^v\|^V\|^a" | grep -E "[0-9]+.[0-9]+.[0-9]+").gz"
-echo -e $CLASH_TUN_URL
 CLASH_META_URL="https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-amd64.tar.gz"
 # GEOIP_URL="https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat"
 # GEOSITE_URL="https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat"
@@ -118,7 +117,6 @@ adgcore="package/lean/luci-app-adguardhome/root/usr/bin"
 
 # ADG_CORE_URL="https://github.com/AdguardTeam/AdGuardHome/releases/download/$(uclient-fetch -qO- 'https://api.github.com/repos/AdguardTeam/AdGuardHome/releases' | jsonfilter -e '@[0].tag_name')/AdGuardHome_linux_amd64.tar.gz"
 ADG_CORE_URL="https://github.com/AdguardTeam/AdGuardHome/releases/download/$(curl -s 'https://api.github.com/repos/AdguardTeam/AdGuardHome/releases/latest' | grep -E 'tag_name' | grep -E 'v[0-9.]+' -o 2>/dev/null)/AdGuardHome_linux_amd64.tar.gz"
-echo -e $ADG_CORE_URL
 wget -qO- $ADG_CORE_URL
 if [[ -f "AdGuardHome_amd64.tar.gz" ]]; then
   tar -zxvf AdGuardHome_amd64.tar.gz -C $adgcore
