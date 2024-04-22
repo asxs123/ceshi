@@ -156,10 +156,13 @@ cp -r $GITHUB_WORKSPACE/source/img/* ${GITHUB_WORKSPACE}/openwrt/files/www/luci-
 
 
 # 修改passwall依赖
-if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocksr-libev" ]]; then
-  curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocksr-libev/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocksr-libev/Makefile
-fi
+# 取消shadowsocksr-libev的libopenssl-legacy依赖
+# if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocksr-libev" ]]; then
+#   echo "取消shadowsocksr-libev的libopenssl-legacy依赖"
+#   curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocksr-libev/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocksr-libev/Makefile
+# fi
 # 降低shadowsocks-rust版本,最新版本编译不成功
 if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust" ]]; then
+  echo "降低shadowsocks-rust版本,最新版本编译不成功"
   curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocks-rust/Makefile
 fi
