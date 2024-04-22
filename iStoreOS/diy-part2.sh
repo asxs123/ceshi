@@ -166,3 +166,8 @@ if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust" 
   echo "降低shadowsocks-rust版本,最新版本编译不成功"
   curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocks-rust/Makefile
 fi
+
+
+
+rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third/luci-app-baidupcs-web
+rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/third/luci-app-baidupcs-web
