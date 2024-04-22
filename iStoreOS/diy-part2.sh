@@ -30,6 +30,16 @@ git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
 git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
 
 
+
+echo -e "预置unblockneteasemusic内核"
+NAME="package/luci-app-unblockneteasemusic/root/usr/share/unblockneteasemusic" && mkdir -p $NAME/core
+echo "$(uclient-fetch -qO- 'https://api.github.com/repos/UnblockNeteaseMusic/server/commits?sha=enhanced&path=precompiled' | jsonfilter -e '@[0].sha')">"$NAME/core_local_ver"
+curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/precompiled/app.js -o $NAME/core/app.js
+curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/precompiled/bridge.js -o $NAME/core/bridge.js
+curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/ca.crt -o $NAME/core/ca.crt
+curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.crt -o $NAME/core/server.crt
+curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.key -o $NAME/core/server.key
+
 # 判断CPU架构
 if [[ `grep -c "CONFIG_ARCH=\"x86_64\"" ${GITHUB_WORKSPACE}/openwrt/.config` -eq '1' ]]; then
   Arch="linux_amd64"
@@ -73,7 +83,6 @@ elif [[ `grep -c "CONFIG_ARCH=\"mips64el\"" ${GITHUB_WORKSPACE}/openwrt/.config`
   echo "CPU架构：mips64el"
 else
   echo "不了解您的CPU为何架构"
-  weizhicpu="1"
 fi
 
 echo "正在执行：给openclash下载核心"
@@ -140,16 +149,17 @@ else
 fi
 rm -rf ${GITHUB_WORKSPACE}/openwrt/{AdGuardHome_${Arch}.tar.gz,AdGuardHome}
 
-# # 添加默认登录壁纸
-# mkdir -p ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
-# cp -r $GITHUB_WORKSPACE/source/video/* ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
-# cp -r $GITHUB_WORKSPACE/source/img/* ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
+# 添加默认登录壁纸
+mkdir -p ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
+cp -r $GITHUB_WORKSPACE/source/video/* ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
+cp -r $GITHUB_WORKSPACE/source/img/* ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
 
-# echo -e "预置unblockneteasemusic内核"
-# NAME="package/luci-app-unblockneteasemusic/root/usr/share/unblockneteasemusic" && mkdir -p $NAME/core
-# echo "$(uclient-fetch -qO- 'https://api.github.com/repos/UnblockNeteaseMusic/server/commits?sha=enhanced&path=precompiled' | jsonfilter -e '@[0].sha')">"$NAME/core_local_ver"
-# curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/precompiled/app.js -o $NAME/core/app.js
-# curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/precompiled/bridge.js -o $NAME/core/bridge.js
-# curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/ca.crt -o $NAME/core/ca.crt
-# curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.crt -o $NAME/core/server.crt
-# curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.key -o $NAME/core/server.key
+
+# 修改passwall依赖
+if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocksr-libev" ]]; then
+  curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocksr-libev/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocksr-libev/Makefile
+fi
+# 降低shadowsocks-rust版本,最新版本编译不成功
+if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust" ]]; then
+  curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocks-rust/Makefile
+fi
