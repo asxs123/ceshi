@@ -31,11 +31,21 @@ git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.gi
 
 
 
+# # 因为部分软件包需要用到 upx，而官方 SDK 镜像中没有包含，所以自行安装
+# sudo apt-get update
+# sudo apt-get install upx -y
+# cp /usr/bin/upx staging_dir/host/bin
+# cp /usr/bin/upx-ucl staging_dir/host/bin
 
 # 更换golang版本
-rm -rf ${HOME_PATH}/feeds/packages/lang/golang
-git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${HOME_PATH}/feeds/packages/lang/golang
+rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
+git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
 
+# # 更换glib2版本及依赖
+# rm -rf ${HOME_PATH}/feeds/packages/libs/glib2
+# cp -Rf ${HOME_PATH}/build/common/Share/glib2 ${HOME_PATH}/feeds/packages/libs/glib2
+# rm -rf ${HOME_PATH}/feeds/packages/libs/pcre2
+# cp -Rf ${HOME_PATH}/build/common/Share/pcre2 ${HOME_PATH}/feeds/packages/libs/pcre2
 
 
 
