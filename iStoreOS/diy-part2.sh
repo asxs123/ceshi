@@ -167,10 +167,10 @@ else
 fi
 rm -rf ${GITHUB_WORKSPACE}/openwrt/{AdGuardHome_${Arch}.tar.gz,AdGuardHome}
 
-# 添加默认登录壁纸
-mkdir -p ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
-cp -r $GITHUB_WORKSPACE/source/video/* ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
-cp -r $GITHUB_WORKSPACE/source/img/* ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
+# # 添加默认登录壁纸
+# mkdir -p ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
+# cp -r $GITHUB_WORKSPACE/source/video/* ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
+# cp -r $GITHUB_WORKSPACE/source/img/* ${GITHUB_WORKSPACE}/openwrt/files/www/luci-static/argon/background/
 
 
 # 修改passwall依赖
