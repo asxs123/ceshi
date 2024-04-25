@@ -21,13 +21,13 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 
 
 
-# # 添加adguardhome
-# rm -rf ./package/lean/luci-app-adguardhome
-# git clone https://github.com/rufengsuixing/luci-app-adguardhome.git ./package/lean/luci-app-adguardhome
-# # 添加ddns-go
-# git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
-# # 添加unblockneteasemusic
-# git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
+# 添加adguardhome
+rm -rf ./package/lean/luci-app-adguardhome
+git clone https://github.com/rufengsuixing/luci-app-adguardhome.git ./package/lean/luci-app-adguardhome
+# 添加ddns-go
+git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
+# 添加unblockneteasemusic
+git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
 
 
 
@@ -37,9 +37,9 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 # cp /usr/bin/upx staging_dir/host/bin
 # cp /usr/bin/upx-ucl staging_dir/host/bin
 
-# # 更换golang版本
-# rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
-# git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
+# 更换golang版本
+rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
+git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
 
 # # 更换glib2版本及依赖
 # rm -rf ${HOME_PATH}/feeds/packages/libs/glib2
