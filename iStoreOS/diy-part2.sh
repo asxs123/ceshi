@@ -169,11 +169,11 @@ curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/ca.crt -o $NA
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.crt -o $NAME/core/server.crt
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.key -o $NAME/core/server.key
 
-echo "添加默认登录壁纸"
-rm -rf ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-mkdir -p ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-cp -r $GITHUB_WORKSPACE/source/video/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-cp -r $GITHUB_WORKSPACE/source/img/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+# echo "添加默认登录壁纸"
+# rm -rf ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+# mkdir -p ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+# cp -r $GITHUB_WORKSPACE/source/video/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+# cp -r $GITHUB_WORKSPACE/source/img/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
 
 
 # 修改passwall依赖
