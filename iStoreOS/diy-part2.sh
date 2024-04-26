@@ -54,12 +54,12 @@ git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${GITHUB_WORKSPA
 
 # 更换glib2版本及依赖
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/glib2
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/build/Share/glib2 ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/glib2
+cp -Rf ${GITHUB_WORKSPACE}/build/Share/glib2 ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/glib2
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/pcre2
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/build/Share/pcre2 ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/pcre2
+cp -Rf ${GITHUB_WORKSPACE}/build/Share/pcre2 ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/pcre2
 
 if [[ ! -d "${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/rust" ]]; then
-  cp -Rf ${GITHUB_WORKSPACE}/openwrt/build/Share/rust ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/rust
+  cp -Rf ${GITHUB_WORKSPACE}/build/Share/rust ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/rust
 fi
 
 
