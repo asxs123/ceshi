@@ -58,6 +58,10 @@ cp -Rf ${HOME_PATH}/build/Share/glib2 ${HOME_PATH}/feeds/packages/libs/glib2
 rm -rf ${HOME_PATH}/feeds/packages/libs/pcre2
 cp -Rf ${HOME_PATH}/build/Share/pcre2 ${HOME_PATH}/feeds/packages/libs/pcre2
 
+if [[ ! -d "${HOME_PATH}/feeds/packages/lang/rust" ]]; then
+  cp -Rf ${HOME_PATH}/build/Share/rust ${HOME_PATH}/feeds/packages/lang/rust
+fi
+
 
 
 
