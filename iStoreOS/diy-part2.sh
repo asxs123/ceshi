@@ -41,7 +41,9 @@ if [[ ! -f "${HOME_PATH}/staging_dir/host/bin/upx" ]]; then
   cp -Rf /usr/bin/upx-ucl ${HOME_PATH}/staging_dir/host/bin/upx-ucl
 fi
 if [[ ! -f "${HOME_PATH}/staging_dir/host/bin/upx" ]]; then
-  echo "upx添加失败"
+  if [[ ! -f "/usr/bin/upx" ]]; then
+    echo "upx添加失败,未找到文件"
+  fi
 else
   echo "upx添加成功"
 fi
@@ -52,9 +54,9 @@ git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${GITHUB_WORKSPA
 
 # 更换glib2版本及依赖
 rm -rf ${HOME_PATH}/feeds/packages/libs/glib2
-cp -Rf ${HOME_PATH}/build/common/Share/glib2 ${HOME_PATH}/feeds/packages/libs/glib2
+cp -Rf ${HOME_PATH}/build/Share/glib2 ${HOME_PATH}/feeds/packages/libs/glib2
 rm -rf ${HOME_PATH}/feeds/packages/libs/pcre2
-cp -Rf ${HOME_PATH}/build/common/Share/pcre2 ${HOME_PATH}/feeds/packages/libs/pcre2
+cp -Rf ${HOME_PATH}/build/Share/pcre2 ${HOME_PATH}/feeds/packages/libs/pcre2
 
 
 
