@@ -36,11 +36,11 @@ git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.gi
 # sudo apt-get install upx -y
 # cp /usr/bin/upx staging_dir/host/bin
 # cp /usr/bin/upx-ucl staging_dir/host/bin
-if [[ ! -f "${HOME_PATH}/staging_dir/host/bin/upx" ]]; then
-  cp -Rf /usr/bin/upx ${HOME_PATH}/staging_dir/host/bin/upx
-  cp -Rf /usr/bin/upx-ucl ${HOME_PATH}/staging_dir/host/bin/upx-ucl
+if [[ ! -f "${GITHUB_WORKSPACE}/openwrt/staging_dir/host/bin/upx" ]]; then
+  cp -Rf /usr/bin/upx ${GITHUB_WORKSPACE}/openwrt/staging_dir/host/bin/upx
+  cp -Rf /usr/bin/upx-ucl ${GITHUB_WORKSPACE}/openwrt/staging_dir/host/bin/upx-ucl
 fi
-if [[ ! -f "${HOME_PATH}/staging_dir/host/bin/upx" ]]; then
+if [[ ! -f "${GITHUB_WORKSPACE}/openwrt/staging_dir/host/bin/upx" ]]; then
   if [[ ! -f "/usr/bin/upx" ]]; then
     echo "upx添加失败,未找到文件"
   fi
@@ -53,13 +53,13 @@ rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
 
 # 更换glib2版本及依赖
-rm -rf ${HOME_PATH}/feeds/packages/libs/glib2
-cp -Rf ${HOME_PATH}/build/Share/glib2 ${HOME_PATH}/feeds/packages/libs/glib2
-rm -rf ${HOME_PATH}/feeds/packages/libs/pcre2
-cp -Rf ${HOME_PATH}/build/Share/pcre2 ${HOME_PATH}/feeds/packages/libs/pcre2
+rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/glib2
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/build/Share/glib2 ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/glib2
+rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/pcre2
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/build/Share/pcre2 ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/pcre2
 
-if [[ ! -d "${HOME_PATH}/feeds/packages/lang/rust" ]]; then
-  cp -Rf ${HOME_PATH}/build/Share/rust ${HOME_PATH}/feeds/packages/lang/rust
+if [[ ! -d "${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/rust" ]]; then
+  cp -Rf ${GITHUB_WORKSPACE}/openwrt/build/Share/rust ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/rust
 fi
 
 
