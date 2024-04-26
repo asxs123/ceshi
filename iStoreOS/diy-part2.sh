@@ -162,7 +162,7 @@ rm -rf ${GITHUB_WORKSPACE}/openwrt/{AdGuardHome_${Arch}.tar.gz,AdGuardHome}
 echo "预置unblockneteasemusic内核"
 mkdir -p ${GITHUB_WORKSPACE}/openwrt/files/usr/share/unblockneteasemusic
 NAME="${GITHUB_WORKSPACE}/openwrt/files/usr/share/unblockneteasemusic" && mkdir -p $NAME/core
-echo "" > "$NAME/core_local_ver"
+# echo "" > "$NAME/core_local_ver"
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/precompiled/app.js -o $NAME/core/app.js
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/precompiled/bridge.js -o $NAME/core/bridge.js
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/ca.crt -o $NAME/core/ca.crt
