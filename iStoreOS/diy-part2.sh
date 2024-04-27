@@ -209,5 +209,7 @@ fi
 
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third/luci-app-baidupcs-web
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/third/luci-app-baidupcs-web
+
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/net/xray-core
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/xray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
