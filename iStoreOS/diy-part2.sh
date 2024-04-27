@@ -51,6 +51,8 @@ fi
 # 更换golang版本
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
+export GOPROXY=https://goproxy.io
+export GO111MODULE=on
 
 # 更换glib2版本及依赖
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/glib2
