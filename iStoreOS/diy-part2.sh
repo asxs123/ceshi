@@ -32,10 +32,6 @@ git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.gi
 
 
 # # 因为部分软件包需要用到 upx，而官方 SDK 镜像中没有包含，所以自行安装
-# sudo apt-get update
-# sudo apt-get install upx -y
-# cp /usr/bin/upx staging_dir/host/bin
-# cp /usr/bin/upx-ucl staging_dir/host/bin
 if [[ ! -f "${GITHUB_WORKSPACE}/openwrt/staging_dir/host/bin/upx" ]]; then
   cp -Rf /usr/bin/upx ${GITHUB_WORKSPACE}/openwrt/staging_dir/host/bin/upx
   cp -Rf /usr/bin/upx-ucl ${GITHUB_WORKSPACE}/openwrt/staging_dir/host/bin/upx-ucl
@@ -186,19 +182,14 @@ curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/ca.crt -o $NA
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.crt -o $NAME/core/server.crt
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.key -o $NAME/core/server.key
 
-# echo "添加默认登录壁纸"
-# rm -rf ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-# mkdir -p ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-# cp -r $GITHUB_WORKSPACE/source/video/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-# cp -r $GITHUB_WORKSPACE/source/img/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+echo "添加默认登录壁纸"
+rm -rf ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+mkdir -p ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+cp -r $GITHUB_WORKSPACE/source/video/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
+cp -r $GITHUB_WORKSPACE/source/img/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
 
 
-# 修改passwall依赖
-# 取消shadowsocksr-libev的libopenssl-legacy依赖
-# if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocksr-libev" ]]; then
-#   echo "取消shadowsocksr-libev的libopenssl-legacy依赖"
-#   curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocksr-libev/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocksr-libev/Makefile
-# fi
+
 # 降低shadowsocks-rust版本,最新版本编译不成功
 if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust" ]]; then
   echo "降低shadowsocks-rust版本,最新版本编译不成功"
