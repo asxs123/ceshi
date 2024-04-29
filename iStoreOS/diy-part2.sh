@@ -19,8 +19,8 @@ sed -i 's/192.168.1.1/192.168.1.3/g' package/base-files/files/bin/config_generat
 ###### 取消bootstrap为默认主题 ######
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
 
-# Modify default passwd
-sed -i '/$1$5mjCdAB1$Uk1sNbwoqfHxUmzRIeuZK1/ d' package/base-files/files/etc/shadow
+# # Modify default passwd
+# sed -i '/$1$5mjCdAB1$Uk1sNbwoqfHxUmzRIeuZK1/ d' package/base-files/files/etc/shadow
 
 
 # 添加adguardhome
