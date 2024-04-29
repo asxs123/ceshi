@@ -182,12 +182,6 @@ curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/ca.crt -o $NA
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.crt -o $NAME/core/server.crt
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.key -o $NAME/core/server.key
 
-echo "添加默认登录壁纸"
-rm -rf ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-mkdir -p ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-cp -r $GITHUB_WORKSPACE/source/video/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-cp -r $GITHUB_WORKSPACE/source/img/* ./feeds/third/luci-theme-argon/htdocs/luci-static/argon/background/
-
 
 
 # 降低shadowsocks-rust版本,最新版本编译不成功
@@ -195,12 +189,13 @@ if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust" 
   echo "降低shadowsocks-rust版本,最新版本编译不成功"
   curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocks-rust/Makefile
 fi
+# 更换xray-core，固件自带的编译不成功
+rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
+rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/net/xray-core
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/xray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
 
 
 
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third/luci-app-baidupcs-web
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/third/luci-app-baidupcs-web
 
-rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
-rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/net/xray-core
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/xray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
