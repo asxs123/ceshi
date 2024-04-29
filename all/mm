@@ -16,4 +16,5 @@ chmod +x ${1}.sh
 # 创建归档文件
 # 注意：这里假设只有 ${script_name} 需要被打包
 ./makeself.sh . "/Users/wukongguoqu/Documents/GitHub/scriptdemo/${1}.run" "${1} script" "./${1}.sh"
-
+./makeself.sh --nox11 ./xxx ./out/xxx_x86.run "OneClick install" ./install.sh
+https://github.com/megastep/makeself/releases/download/release-2.5.0/makeself-2.5.0.run
