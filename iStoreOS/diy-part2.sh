@@ -196,13 +196,17 @@ fi
 # 更换xray-core，固件自带的编译不成功
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/net/xray-core
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/xray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/xray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/passwall_packages/xray-core
 
 
 
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third/luci-app-baidupcs-web
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/third/luci-app-baidupcs-web
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third_party/luci-app-LingTiGameAcc
+
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/trojan-go
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/v2ray-core
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/v2ray-geodata
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/trojan-go ${GITHUB_WORKSPACE}/openwrt/package/feeds/passwall_packages/trojan-go
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/v2ray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/passwall_packages/v2ray-core
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/v2ray-geodata ${GITHUB_WORKSPACE}/openwrt/package/feeds/passwall_packages/v2ray-geodata
