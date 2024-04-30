@@ -203,5 +203,6 @@ cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/xray-core ${GITHUB_WO
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third/luci-app-baidupcs-web
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/third/luci-app-baidupcs-web
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third_party/luci-app-LingTiGameAcc
-# rm -rf ${GITHUB_WORKSPACE}/openwrt/
-# rm -rf ${GITHUB_WORKSPACE}/openwrt/
+rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/trojan-go
+rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/v2ray-core
+rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/v2ray-geodata
