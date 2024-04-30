@@ -31,6 +31,8 @@ git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
 # 添加unblockneteasemusic
 git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
 
+git clone https://github.com/sbwml/luci-app-alist ./package/alist
+
 
 
 # # 因为部分软件包需要用到 upx，而官方 SDK 镜像中没有包含，所以自行安装
@@ -200,4 +202,6 @@ cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/xray-core ${GITHUB_WO
 
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third/luci-app-baidupcs-web
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/third/luci-app-baidupcs-web
-
+rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third_party/luci-app-LingTiGameAcc
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/
