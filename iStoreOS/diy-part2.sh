@@ -23,15 +23,15 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 # sed -i '/$1$5mjCdAB1$Uk1sNbwoqfHxUmzRIeuZK1/ d' package/base-files/files/etc/shadow
 
 
-# 添加adguardhome
-rm -rf ./package/lean/luci-app-adguardhome
-git clone https://github.com/rufengsuixing/luci-app-adguardhome.git ./package/lean/luci-app-adguardhome
-# 添加ddns-go
-git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
-# 添加unblockneteasemusic
-git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
+# # 添加adguardhome
+# rm -rf ./package/lean/luci-app-adguardhome
+# git clone https://github.com/rufengsuixing/luci-app-adguardhome.git ./package/lean/luci-app-adguardhome
+# # 添加ddns-go
+# git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
+# # 添加unblockneteasemusic
+# git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
 
-git clone https://github.com/sbwml/luci-app-alist ./package/alist
+# git clone https://github.com/sbwml/luci-app-alist ./package/alist
 
 
 
