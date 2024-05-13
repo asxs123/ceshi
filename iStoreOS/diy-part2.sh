@@ -23,15 +23,15 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 # sed -i '/$1$5mjCdAB1$Uk1sNbwoqfHxUmzRIeuZK1/ d' package/base-files/files/etc/shadow
 
 
-# # 添加adguardhome
-# rm -rf ./package/lean/luci-app-adguardhome
-# git clone https://github.com/rufengsuixing/luci-app-adguardhome.git ./package/lean/luci-app-adguardhome
-# # 添加ddns-go
-# git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
-# # 添加unblockneteasemusic
-# git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
+# 添加adguardhome
+rm -rf ./package/lean/luci-app-adguardhome
+git clone https://github.com/rufengsuixing/luci-app-adguardhome.git ./package/lean/luci-app-adguardhome
+# 添加ddns-go
+git clone https://github.com/sirpdboy/luci-app-ddns-go.git ./package/ddns-go
+# 添加unblockneteasemusic
+git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git ./package/luci-app-unblockneteasemusic
 
-# git clone https://github.com/sbwml/luci-app-alist ./package/alist
+git clone https://github.com/sbwml/luci-app-alist ./package/alist
 
 
 
@@ -189,14 +189,14 @@ curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.key -o
 
 
 # 降低shadowsocks-rust版本,最新版本编译不成功
-if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/shadowsocks-rust" ]]; then
+if [[ -d "${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust" ]]; then
   echo "降低shadowsocks-rust版本,最新版本编译不成功"
-  curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/shadowsocks-rust/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocks-rust/Makefile
+  curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocks-rust/Makefile
 fi
 # 更换xray-core，固件自带的编译不成功
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
 rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/net/xray-core
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/xray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/xray-core
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/xray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/passwall_packages/xray-core
 
 
 
@@ -207,6 +207,6 @@ rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third_party/luci-app-LingTiGame
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/trojan-go
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/v2ray-core
 rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/v2ray-geodata
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/trojan-go ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/trojan-go
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/v2ray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/v2ray-core
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/v2ray-geodata ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/v2ray-geodata
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/trojan-go ${GITHUB_WORKSPACE}/openwrt/package/feeds/passwall_packages/trojan-go
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/v2ray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/passwall_packages/v2ray-core
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/v2ray-geodata ${GITHUB_WORKSPACE}/openwrt/package/feeds/passwall_packages/v2ray-geodata
