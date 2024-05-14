@@ -17,6 +17,6 @@ src-git jjm2473_apps https://github.com/jjm2473/openwrt-apps.git;main
 # src-git helloworld https://github.com/fw876/helloworld;master
 src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git;main
 # src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main
-src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main
-src-git OpenClash https://github.com/vernesong/OpenClash;master
-# src-git mypackages https://github.com/asxs123/mypackages;main
+# src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main
+# src-git OpenClash https://github.com/vernesong/OpenClash;master
+src-git mypackages https://github.com/asxs123/mypackages;main
