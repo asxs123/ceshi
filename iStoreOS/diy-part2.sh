@@ -48,21 +48,21 @@ else
   echo "upx添加成功"
 fi
 
-# 更换golang版本
-rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
-git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
-export GOPROXY=https://goproxy.io
-export GO111MODULE=on
+# # 更换golang版本
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
+# git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/golang
+# export GOPROXY=https://goproxy.io
+# export GO111MODULE=on
 
-# 更换glib2版本及依赖
-rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/glib2
-cp -Rf ${GITHUB_WORKSPACE}/build/Share/glib2 ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/glib2
-rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/pcre2
-cp -Rf ${GITHUB_WORKSPACE}/build/Share/pcre2 ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/pcre2
+# # 更换glib2版本及依赖
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/glib2
+# cp -Rf ${GITHUB_WORKSPACE}/build/Share/glib2 ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/glib2
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/pcre2
+# cp -Rf ${GITHUB_WORKSPACE}/build/Share/pcre2 ${GITHUB_WORKSPACE}/openwrt/feeds/packages/libs/pcre2
 
-if [[ ! -d "${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/rust" ]]; then
-  cp -Rf ${GITHUB_WORKSPACE}/build/Share/rust ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/rust
-fi
+# if [[ ! -d "${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/rust" ]]; then
+#   cp -Rf ${GITHUB_WORKSPACE}/build/Share/rust ${GITHUB_WORKSPACE}/openwrt/feeds/packages/lang/rust
+# fi
 
 
 
@@ -193,20 +193,20 @@ curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.key -o
 #   echo "降低shadowsocks-rust版本,最新版本编译不成功"
 #   curl -o ${GITHUB_WORKSPACE}/openwrt/feeds/passwall_packages/shadowsocks-rust/Makefile https://raw.githubusercontent.com/281677160/common/main/Share/shadowsocks-rust/Makefile
 # fi
-# 更换xray-core，固件自带的编译不成功
-rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
-rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/net/xray-core
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/xray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/xray-core
+# # 更换xray-core，固件自带的编译不成功
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/xray-core
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/net/xray-core
+# cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/xray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/xray-core
 
 
 
-rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third/luci-app-baidupcs-web
-rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/third/luci-app-baidupcs-web
-rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third_party/luci-app-LingTiGameAcc
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third/luci-app-baidupcs-web
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/third/luci-app-baidupcs-web
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/third_party/luci-app-LingTiGameAcc
 
-rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/trojan-go
-rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/v2ray-core
-rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/v2ray-geodata
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/trojan-go ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/trojan-go
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/v2ray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/v2ray-core
-cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/v2ray-geodata ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/v2ray-geodata
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/trojan-go
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/v2ray-core
+# rm -rf ${GITHUB_WORKSPACE}/openwrt/package/feeds/packages/v2ray-geodata
+# cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/trojan-go ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/trojan-go
+# cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/v2ray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/v2ray-core
+# cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/v2ray-geodata ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/v2ray-geodata
