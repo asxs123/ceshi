@@ -10,8 +10,8 @@
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 #
 
-# rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/net/xray-core
-# cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/xray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/xray-core
+rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/net/xray-core
+cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/xray-core ${GITHUB_WORKSPACE}/openwrt/feeds/packages/net/xray-core
 # rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/trojan-go
 # rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/v2ray-core
 # rm -rf ${GITHUB_WORKSPACE}/openwrt/feeds/packages/v2ray-geodata
