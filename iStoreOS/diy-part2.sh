@@ -210,3 +210,8 @@ curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.key -o
 # cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/trojan-go ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/trojan-go
 # cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/v2ray-core ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/v2ray-core
 # cp -Rf ${GITHUB_WORKSPACE}/openwrt/feeds/mypackages/v2ray-geodata ${GITHUB_WORKSPACE}/openwrt/package/feeds/mypackages/v2ray-geodata
+
+
+
+mkdir -p ${GITHUB_WORKSPACE}/openwrt/dl
+cp -r ${GITHUB_WORKSPACE}/build/dl/* $GITHUB_WORKSPACE/openwrt/dl/
